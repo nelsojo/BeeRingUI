@@ -18,6 +18,14 @@ body {
     width: 80%;
     max-width: 600px;
 }
+.image-container {
+    max-width: 90%; /* restricts the image to 90% of the container width */
+    margin: 20px auto; /* centers the image and adds space around */
+}
+.responsive-image {
+    max-width: 100%; /* makes the image responsive to the width of its container */
+    height: auto; /* maintains the aspect ratio */
+}
 h1, h2 {
     color: #ff8c00; /* Orange color for headers */
 }
@@ -38,11 +46,4 @@ a {
 a:hover {
     background-color: #ff8c00; /* Darker orange on hover */
     color: #fff;
-}
-
-.responsive-image {
-    max-width: 75%; /* ensures the image is never wider than its container */
-    height: auto; /* maintains the aspect ratio */
-    display: block; /* ensures there are no extra spaces around the image */
-    margin: 0 auto; /* centers the image horizontally if it's smaller than its container */
 }
