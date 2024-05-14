@@ -39,3 +39,10 @@ a:hover {
     background-color: #ff8c00; /* Darker orange on hover */
     color: #fff;
 }
+
+.responsive-image {
+    max-width: 75%; /* ensures the image is never wider than its container */
+    height: auto; /* maintains the aspect ratio */
+    display: block; /* ensures there are no extra spaces around the image */
+    margin: 0 auto; /* centers the image horizontally if it's smaller than its container */
+}
