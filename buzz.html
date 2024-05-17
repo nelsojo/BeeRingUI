@@ -5,7 +5,6 @@
 <title>Tic Tac Toe with Bee Design</title>
 <link rel="stylesheet" href="style.css">
 <style>
- 
 .board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
@@ -32,18 +31,16 @@
 </style>
 </head>
 <body>
-    
     <div class="header-container">
         <img src="logonobak.png" alt="Bee-Ring Logo" class="logo">
         <div class="navbar">
-            <a  href="index.html">Home</a>
+            <a href="index.html">Home</a>
             <a href="about.html">About</a>
             <a class="active" href="buzz.html">Buzz</a>
         </div>
     </div>
 <div class="container">
     <h1>Bee-Tac Toe Game</h1>
-    
 <div id="gameBoard" class="board"></div>
 </div>
 <script>
@@ -54,9 +51,9 @@
 
   function isWin(board, player) {
     const patterns = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-      [0, 4, 8], [2, 4, 6]             // Diagonals
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
     ];
     return patterns.some(pattern => {
       return pattern.every(idx => board[idx] === player);
@@ -125,6 +122,14 @@
     checkEndGame(aiPlayer);
   }
 
+  function aiFirstMove() {
+    const availablePositions = [0, 2, 4, 6, 8]; // Corners and center
+    const randomIndex = availablePositions[Math.floor(Math.random() * availablePositions.length)];
+    board[randomIndex] = aiPlayer;
+    updateBoard();
+    checkEndGame(aiPlayer);
+  }
+
   function cellClicked(cell, index) {
     if (board[index] !== null || isWin(board, humanPlayer) || isWin(board, aiPlayer)) return;
     board[index] = humanPlayer;
@@ -161,7 +166,9 @@
   function startNewGame() {
     board.fill(null);
     updateBoard();
-    setTimeout(aiMove, 400); // Let AI make the first move
+    if (Math.random() < 0.5) {  // Randomly decide if AI should start
+        aiFirstMove();
+    }
   }
 
   startNewGame();
