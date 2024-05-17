@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe with Bee Design</title>
+<link rel="stylesheet" href="style.css">
+<style>
+ 
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 10px;
+}
+.cell {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f4f4f4;
+    font-size: 24px;
+    cursor: pointer;
+}
+.bee {
+    background-image: url('bee.png'); /* Update your bee image path as needed */
+    background-size: 50px 50px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100%;
+    height: 100%;
+}
+</style>
+</head>
+<body>
+    
+    <div class="header-container">
+        <img src="logonobak.png" alt="Bee-Ring Logo" class="logo">
+        <div class="navbar">
+            <a  href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a class="active" href="buzz.html">Buzz</a>
+        </div>
+    </div>
+<div class="container">
+    <h1>Bee-Tac Toe Game</h1>
+    
+<div id="gameBoard" class="board"></div>
+</div>
+<script>
+  const board = Array(9).fill(null);
+  const gameBoard = document.getElementById('gameBoard');
+  const humanPlayer = 'X';
+  const aiPlayer = 'O';
+
+  function isWin(board, player) {
+    const patterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+      [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+    return patterns.some(pattern => {
+      return pattern.every(idx => board[idx] === player);
+    });
+  }
+
+  function isBoardFull(board) {
+    return board.every(cell => cell !== null);
+  }
+
+  function minimax(board, depth, isMaximizing) {
+    if (isWin(board, humanPlayer)) {
+      return -10;
+    } else if (isWin(board, aiPlayer)) {
+      return 10;
+    } else if (isBoardFull(board)) {
+      return 0;
+    }
+
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === null) {
+          board[i] = aiPlayer;
+          let score = minimax(board, depth + 1, false);
+          board[i] = null;
+          bestScore = Math.max(score, bestScore);
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === null) {
+          board[i] = humanPlayer;
+          let score = minimax(board, depth + 1, true);
+          board[i] = null;
+          bestScore = Math.min(score, bestScore);
+        }
+      }
+      return bestScore;
+    }
+  }
+
+  function findBestMove(board) {
+    let bestScore = -Infinity;
+    let move;
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] === null) {
+        board[i] = aiPlayer;
+        let score = minimax(board, 0, false);
+        board[i] = null;
+        if (score > bestScore) {
+          bestScore = score;
+          move = i;
+        }
+      }
+    }
+    return move;
+  }
+
+  function aiMove() {
+    let bestMove = findBestMove(board);
+    board[bestMove] = aiPlayer;
+    updateBoard();
+    checkEndGame(aiPlayer);
+  }
+
+  function cellClicked(cell, index) {
+    if (board[index] !== null || isWin(board, humanPlayer) || isWin(board, aiPlayer)) return;
+    board[index] = humanPlayer;
+    updateBoard();
+    checkEndGame(humanPlayer);
+    setTimeout(aiMove, 400); // Delay AI move for better UX
+  }
+
+  function checkEndGame(player) {
+    if (isWin(board, player)) {
+      setTimeout(() => alert(player + ' wins!'), 10);
+      setTimeout(startNewGame, 2000);
+    } else if (isBoardFull(board)) {
+      setTimeout(() => alert('Draw!'), 10);
+      setTimeout(startNewGame, 2000);
+    }
+  }
+
+  function updateBoard() {
+    gameBoard.innerHTML = '';
+    board.forEach((cell, index) => {
+      const cellElement = document.createElement('div');
+      cellElement.className = 'cell';
+      if (cell === 'O') {
+        cellElement.classList.add('bee');  // Apply the bee background to O cells
+      } else {
+        cellElement.textContent = cell;  // X cells remain text-based
+      }
+      cellElement.addEventListener('click', () => cellClicked(cellElement, index));
+      gameBoard.appendChild(cellElement);
+    });
+  }
+
+  function startNewGame() {
+    board.fill(null);
+    updateBoard();
+    setTimeout(aiMove, 400); // Let AI make the first move
+  }
+
+  startNewGame();
+</script>
+</body>
+</html>

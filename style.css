@@ -21,9 +21,11 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 90%;
+    width: auto;  /* Adjust width to fit content rather than stretching */
     max-width: 800px;
 }
+
+
 .image-container {
     max-width: 90%; /* restricts the image to 90% of the container width */
     margin: 20px auto; /* centers the image and adds space around */
