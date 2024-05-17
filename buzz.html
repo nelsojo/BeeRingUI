@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Tic Tac Toe with Bee Design</title>
+<title>Minimax Bee-Tac-Toe</title>
 <link rel="stylesheet" href="style.css">
 <style>
 .board {
@@ -39,32 +39,61 @@
             <a class="active" href="buzz.html">Buzz</a>
         </div>
     </div>
-<div class="container">
-    <h1>Minimax Bee-Tac-Toe</h1>
-<div id="gameBoard" class="board"></div>
-</div>
-<script>
-  const board = Array(9).fill(null);
-  const gameBoard = document.getElementById('gameBoard');
-  const humanPlayer = 'X';
-  const aiPlayer = 'O';
+    <div class="container">
+        <h1>Minimax Bee-Tac-Toe</h1>
+        <div class="scoreboard">
+            <p>Wins: <span id="winCount">0</span></p>
+            <p>Losses: <span id="lossCount">0</span></p>
+            <p>Draws: <span id="drawCount">0</span></p>
+        </div>
+        <div id="gameBoard" class="board"></div>
+    </div>
+    <script>
+      const board = Array(9).fill(null);
+      const gameBoard = document.getElementById('gameBoard');
+      const winCount = document.getElementById('winCount');
+      const lossCount = document.getElementById('lossCount');
+      const drawCount = document.getElementById('drawCount');
+      let wins = 0, losses = 0, draws = 0;
+      const humanPlayer = 'X';
+      const aiPlayer = 'O';
 
-  function isWin(board, player) {
-    const patterns = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6]
-    ];
-    return patterns.some(pattern => {
-      return pattern.every(idx => board[idx] === player);
-    });
-  }
+      function isWin(board, player) {
+        const patterns = [
+          [0, 1, 2], [3, 4, 5], [6, 7, 8],
+          [0, 3, 6], [1, 4, 7], [2, 5, 8],
+          [0, 4, 8], [2, 4, 6]
+        ];
+        return patterns.some(pattern => {
+          return pattern.every(idx => board[idx] === player);
+        });
+      }
 
-  function isBoardFull(board) {
-    return board.every(cell => cell !== null);
-  }
+      function isBoardFull(board) {
+        return board.every(cell => cell !== null);
+      }
 
-  function minimax(board, depth, isMaximizing) {
+      function checkEndGame(player) {
+        if (isWin(board, player)) {
+          if (player === aiPlayer) {
+            alert('AI wins!');
+            losses++;
+            lossCount.textContent = losses;
+          } else {
+            alert('You win!');
+            wins++;
+            winCount.textContent = wins;
+          }
+          setTimeout(startNewGame, 2000);
+        } else if (isBoardFull(board)) {
+          alert('Draw!');
+          draws++;
+          drawCount.textContent = draws;
+          setTimeout(startNewGame, 2000);
+        }
+      }
+
+      function minimax(board, depth, isMaximizing) {
     if (isWin(board, humanPlayer)) {
       return -10;
     } else if (isWin(board, aiPlayer)) {
@@ -138,16 +167,7 @@
     setTimeout(aiMove, 400); // Delay AI move for better UX
   }
 
-  function checkEndGame(player) {
-    if (isWin(board, player)) {
-      setTimeout(() => alert(player + ' wins!'), 10);
-      setTimeout(startNewGame, 2000);
-    } else if (isBoardFull(board)) {
-      setTimeout(() => alert('Draw!'), 10);
-      setTimeout(startNewGame, 2000);
-    }
-  }
-
+  
   function updateBoard() {
     gameBoard.innerHTML = '';
     board.forEach((cell, index) => {
@@ -163,15 +183,15 @@
     });
   }
 
-  function startNewGame() {
-    board.fill(null);
-    updateBoard();
-    if (Math.random() < 0.5) {  // Randomly decide if AI should start
-        aiFirstMove();
-    }
-  }
+      function startNewGame() {
+        board.fill(null);
+        updateBoard();
+        if (Math.random() < 0.5) {  // Randomly decide if AI should start
+            aiFirstMove();
+        }
+      }
 
-  startNewGame();
-</script>
+      startNewGame();
+    </script>
 </body>
 </html>
