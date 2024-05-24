@@ -84,12 +84,12 @@
             wins++;
             winCount.textContent = wins;
           }
-          setTimeout(startNewGame, 2000);
+          setTimeout(startNewGame, 1000);
         } else if (isBoardFull(board)) {
           alert('Draw!');
           draws++;
           drawCount.textContent = draws;
-          setTimeout(startNewGame, 2000);
+          setTimeout(startNewGame, 1000);
         }
       }
 
@@ -164,7 +164,7 @@
     board[index] = humanPlayer;
     updateBoard();
     checkEndGame(humanPlayer);
-    setTimeout(aiMove, 400); // Delay AI move for better UX
+    setTimeout(aiMove, 100); // Delay AI move for better UX
   }
 
   
